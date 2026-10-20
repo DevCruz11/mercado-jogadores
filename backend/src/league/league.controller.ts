@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put, Query, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiZodBody, ApiZodQuery } from '../common/http/openapi';
 import { Response } from 'express';
 import { setLocation } from '../common/http/location';
 import { ParseIdPipe } from '../common/validation/parse-id.pipe';
@@ -33,6 +34,7 @@ export class LeagueController {
   }
 
   @Put('clubs/:id/lineup')
+  @ApiZodBody(setLineupSchema)
   setLineup(
     @Param('id', ParseIdPipe) clubId: number,
     @Body(new ZodValidationPipe(setLineupSchema)) input: SetLineupInput,
@@ -41,6 +43,7 @@ export class LeagueController {
   }
 
   @Post('matches')
+  @ApiZodBody(playMatchSchema)
   async playMatch(
     @Body(new ZodValidationPipe(playMatchSchema)) input: PlayMatchInput,
     @Res({ passthrough: true }) response: Response,
@@ -51,6 +54,7 @@ export class LeagueController {
   }
 
   @Get('matches')
+  @ApiZodQuery(listMatchesQuerySchema)
   listMatches(
     @Query(new ZodValidationPipe(listMatchesQuerySchema)) query: ListMatchesQuery,
   ): Promise<MatchResponse[]> {

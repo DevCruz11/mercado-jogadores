@@ -12,6 +12,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiZodBody, ApiZodQuery } from '../common/http/openapi';
 import { Response } from 'express';
 import { setLocation } from '../common/http/location';
 import { ParseIdPipe } from '../common/validation/parse-id.pipe';
@@ -35,6 +36,7 @@ export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
   @Get()
+  @ApiZodQuery(listPlayersQuerySchema)
   list(
     @Query(new ZodValidationPipe(listPlayersQuerySchema)) query: ListPlayersQuery,
   ): Promise<PlayerPage> {
@@ -47,6 +49,7 @@ export class PlayersController {
   }
 
   @Post()
+  @ApiZodBody(createPlayerSchema)
   async create(
     @Body(new ZodValidationPipe(createPlayerSchema)) input: CreatePlayerInput,
     @Res({ passthrough: true }) response: Response,
@@ -57,6 +60,7 @@ export class PlayersController {
   }
 
   @Put(':id')
+  @ApiZodBody(updatePlayerSchema)
   update(
     @Param('id', ParseIdPipe) id: number,
     @Body(new ZodValidationPipe(updatePlayerSchema)) input: UpdatePlayerInput,
@@ -65,6 +69,7 @@ export class PlayersController {
   }
 
   @Patch(':id/condition')
+  @ApiZodBody(changeConditionSchema)
   changeCondition(
     @Param('id', ParseIdPipe) id: number,
     @Body(new ZodValidationPipe(changeConditionSchema)) input: ChangeConditionInput,

@@ -1,5 +1,6 @@
 import { Body, Controller, HttpCode, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiZodBody } from '../common/http/openapi';
 import { ParseIdPipe } from '../common/validation/parse-id.pipe';
 import { ZodValidationPipe } from '../common/validation/zod-validation.pipe';
 import { BuyPlayerInput, buyPlayerSchema } from './market.schemas';
@@ -11,6 +12,7 @@ export class MarketController {
   constructor(private readonly marketService: MarketService) {}
 
   @Post('buy')
+  @ApiZodBody(buyPlayerSchema)
   @HttpCode(200)
   buy(
     @Param('id', ParseIdPipe) playerId: number,

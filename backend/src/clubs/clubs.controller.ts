@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiZodBody, ApiZodQuery } from '../common/http/openapi';
 import { Response } from 'express';
 import { setLocation } from '../common/http/location';
 import { ParseIdPipe } from '../common/validation/parse-id.pipe';
@@ -19,6 +20,7 @@ export class ClubsController {
   constructor(private readonly clubsService: ClubsService) {}
 
   @Get()
+  @ApiZodQuery(listClubsQuerySchema)
   list(
     @Query(new ZodValidationPipe(listClubsQuerySchema)) query: ListClubsQuery,
   ): Promise<ClubSummaryResponse[]> {
@@ -31,6 +33,7 @@ export class ClubsController {
   }
 
   @Post()
+  @ApiZodBody(createClubSchema)
   async create(
     @Body(new ZodValidationPipe(createClubSchema)) input: CreateClubInput,
     @Res({ passthrough: true }) response: Response,
