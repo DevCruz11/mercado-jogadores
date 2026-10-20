@@ -16,6 +16,7 @@ import { PageHeader } from '../../components/PageHeader';
 import { Pagination } from '../../components/Pagination';
 import { ActionOutcome, useAction } from '../../hooks/useAction';
 import { useApiResource } from '../../hooks/useApiResource';
+import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { formatMoney } from '../../utils/format';
 import { BuyForm } from './BuyForm';
 import { ConditionForm } from './ConditionForm';
@@ -26,6 +27,7 @@ import { PlayerSavedDialog } from './PlayerSavedDialog';
 import { PurchaseResultDialog } from './PurchaseResultDialog';
 
 const PAGE_SIZE = 10;
+const FILTER_DELAY_MS = 350;
 
 type Dialog =
   | { kind: 'create' }
@@ -41,9 +43,10 @@ export function PlayersPage() {
   const [page, setPage] = useState(1);
   const [dialog, setDialog] = useState<Dialog>();
 
+  const debouncedFilterValues = useDebouncedValue(filterValues, FILTER_DELAY_MS);
   const filters = useMemo(
-    () => ({ ...toPlayerFilters(filterValues), page, limit: PAGE_SIZE }),
-    [filterValues, page],
+    () => ({ ...toPlayerFilters(debouncedFilterValues), page, limit: PAGE_SIZE }),
+    [debouncedFilterValues, page],
   );
   const players = useApiResource(() => playersApi.list(filters), JSON.stringify(filters));
   const clubs = useApiResource(() => clubsApi.list('name'), 'clubs');
