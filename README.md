@@ -108,7 +108,7 @@ Os arquivos de trava `backend/package-lock.json` e `frontend/package-lock.json` 
 │   │   ├── transactions/     # histórico, summary e exportação CSV
 │   │   ├── league/           # escalação, motor da partida, partidas e classificação
 │   │   └── prisma/           # PrismaService (acesso ao banco)
-│   └── test/                 # testes unitários das regras de cálculo
+│   └── test/                 # testes das regras de cálculo e da validação HTTP (sem banco)
 └── frontend/
     └── src/
         ├── api/              # camada de acesso à API (fetch) e tipos
@@ -116,7 +116,7 @@ Os arquivos de trava `backend/package-lock.json` e `frontend/package-lock.json` 
         ├── features/         # telas: players, clubs, league
         ├── hooks/            # useApiResource (carregar dados) e useAction (enviar ações)
         ├── utils/            # formatação (moeda, data de Brasília) e validação de formulários
-        └── test/             # testes de componente e de formatação
+        └── test/             # testes de componente, formatação, validação e escalação
 ```
 
 ### Bibliotecas do backend
@@ -150,8 +150,8 @@ Os arquivos de trava `backend/package-lock.json` e `frontend/package-lock.json` 
 
 | Diferencial | Como executar |
 | --- | --- |
-| **Testes do backend** (inclui RN02 a RN05, RN06, RN13, RN15, RN16 e RN20 com os exemplos do enunciado) | `cd backend` e depois `npm test` |
-| **Testes do frontend** (componentes e formatação) | `cd frontend` e depois `npm test` |
+| **Testes do backend** (RN02 a RN06, RN13, RN15, RN16 e RN20 com os exemplos do enunciado, e as regras de validação V1 a V9 chamando a API por HTTP, sem precisar do banco) | `cd backend` e depois `npm test` |
+| **Testes do frontend** (componentes, formatação, validação de formulários e vagas da escalação) | `cd frontend` e depois `npm test` |
 | **Lint e formatação do backend** | `cd backend`, depois `npm run lint` e `npm run format:check` |
 | **Lint e formatação do frontend** | `cd frontend`, depois `npm run lint` e `npm run format:check` |
 | **Documentação interativa (Swagger)** | Com a API no ar, abra `http://localhost:3000/api/docs` |
